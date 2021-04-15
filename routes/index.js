@@ -3,7 +3,7 @@ var router = express.Router();
 
 // 后端交易入口
 let allModule = {
-  Stock:require('./Shock/shockDetail'),
+  Stock:require('./Stock/stockDetail'),
   BookInfo: require('./Book/bookInfo'),
   BookContent: require('./Book/bookContent')
 }
@@ -14,7 +14,7 @@ router.all('/api/:module/:action', async (req, res, next) => {
   if( !allModule[req.params.module][req.params.action] ){
     res.json({
       code:'404',
-      message: `${allModule[req.params.module]}模块的${allModule[req.params.action]}接口未找到`
+      message: `${req.params.module}模块的${req.params.action}接口未找到`
     })
     return;
   }
@@ -23,13 +23,19 @@ router.all('/api/:module/:action', async (req, res, next) => {
   try {
 		await allModule[req.params.module][req.params.action](req, res, next);
 	} catch (error) {
+    if( error === 'method error'){
+      res.json({
+        code: 502,
+        message: "接口请求方式出错, 请确认接口请求方式"
+      });
+      return;
+    }
 		console.log(error);
-		let responseBody = {
+    res.json({
 			code: 500,
 			message: "接口调用方式出错，未取到正确参数！",
 			data:error
-		}
-    res.json(responseBody);
+		});
 	}
 })
 
