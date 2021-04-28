@@ -14,7 +14,7 @@ let GetAllShockName = async (req, res)=>{
     
     try {
         result = await getData.getStockName(stocks_num, traverse_time); // 获取到初始数据
-        convert_result = getData.convertData(result);   // 对初始数据进行处理
+        convert_result = getData.convertData(result);   // 对初始数据进行处理(替换标题为具体含义)
         getData.geneExcel(convert_result);              // 对数据生成excel表
     } catch (error) {
         console.log(error)

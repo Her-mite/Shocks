@@ -31,10 +31,10 @@ exports.getStockName = function async(stocks_num, traverse_time) {
     }
 
     let getAllShock = [];
-
+    console.log("获取原始信息")
     for (let page = 1; page < traverse_time; page++) {
         let url = `http://81.push2.eastmoney.com/api/qt/clist/get?cb=&pn=${page}&pz=${stocks_num}&po=1&np=1&ut=bd1d9ddb04089700cf9c27f6f7426281&fltt=2&invt=2&fid=f3&fs=m:0+t:6,m:0+t:80,m:1+t:2,m:1+t:23&fields=f2,f3,f4,f5,f6,f7,f8,f9,f10,f12,f13,f14,f15,f16,f17,f18,f23&_=1618149249401`
-        console.log(url)
+        // console.log(url)
         getAllShock.push(getSingleData(url))  
     }
 
@@ -69,6 +69,7 @@ exports.convertData = function(data){
 
     // console.log(data)
     let final_result = [];
+    console.log("替换标题")
     data.forEach(singleArray => {
         if(typeof(singleArray) == 'object'){
             singleArray.forEach(element => {
@@ -84,19 +85,22 @@ exports.convertData = function(data){
         }
 
 
-        // this.newObj= JSON.parse(JSON.stringify(obj).replace(/age/g, 'nianl'));
     });
-    // console.log("new",final_result)
 
     return final_result;
 }
 
 // 生成excel
 exports.geneExcel = function(convert_data) {
-    console.log("geneExcle")
+    
+    // console.log("conver:", convert_data)
+    console.log("将数据写入excel表")
     let data = [['最新价格','涨跌幅','涨跌额','成交量','成交额','振幅','换手率','市盈率(动态)','量比','股票代码','股票类型 1-上证 0-深证','股票名称','最高值','最低值','今开','昨收','市净率']];
     convert_data.forEach(element => {
-        data.push(Object.values(element));
+        // 筛除ST退市警告和已退市的股票
+        if( (element['股票名称'].indexOf('ST') == -1) && (element['股票名称'].indexOf('退') == -1)){
+            data.push(Object.values(element));
+        }
     });
 
     let buffer = xlsx.build([
