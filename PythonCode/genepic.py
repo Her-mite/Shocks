@@ -19,7 +19,7 @@ stock_data = excel.sheets()[0]
 # excel表第二列为股票涨跌幅，下标为1
 price = stock_data.col(1)
 for price_data in price[1:]:
-    if( not isinstance(price_data.value,float)):
+    if( not isinstance(price_data.value,float)): # 遍历数组元素，取出其值， 转化为浮点型
         continue
     if float(price_data.value) <= -10:
         price_rank[0] += 1
@@ -65,7 +65,8 @@ ax.spines['right'].set_color('none')
 ax.spines['top'].set_color('none')
 ax.spines['left'].set_color('none')
 ax.set_axisbelow(True) #将网格线至于主图下方
-
+plt.rcParams['font.sans-serif']=['SimHei'] #显示中文标签
+plt.rcParams['axes.unicode_minus']=False
 plt.grid(axis="y", ls='--') # 设置横向虚线
 
 
@@ -78,8 +79,7 @@ for x1, yy in zip(x, y):
 plt.title("今日股市涨跌分布情况", fontsize=12)
 
 # 显示图例
-
 plt.legend()
 
-plt.savefig('./test2.jpg', dpi=300)
+plt.savefig('./今日股市涨跌分布情况.jpg', dpi=300)
 plt.show()
