@@ -84,7 +84,7 @@ def query_stock_data(stocks):
     print("plate_dict:", plate_dict)
     # 降序排序
     sorted_plate_dict= sorted(plate_dict.items(), key=lambda d:d[1], reverse = True)
-
+    print(sorted_plate_dict)
     # 写入到excel表
     file_name = '板块结果统计.xls'
     sheet_name = '统计详情'
